@@ -1,6 +1,9 @@
 package fantasyadmin;
 
 import javax.swing.*;
+
+import fantasyadmin.api.RequestSender;
+
 import java.awt.*;
 import java.util.Arrays;
 
@@ -8,8 +11,11 @@ public class MainWindow extends JFrame {
     private final JComboBox<String> typeComboBox;
     private final JTextField fileTextField;
 
+    private final RequestSender requestSender;
+
     public MainWindow() {
         super("ЧГК Фентези. Клиент администратора");
+        requestSender = new RequestSender();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
         setMinimumSize(new Dimension(600, 400));

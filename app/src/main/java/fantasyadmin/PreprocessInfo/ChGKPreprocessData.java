@@ -27,7 +27,7 @@ public class ChGKPreprocessData {
 
         // from api
         ArrayList<Team2> allTeams = new ArrayList<>();
-        RequestSender.getPlayers();
+        RequestSender.getTeams();
         allTeams.add(new Team2(1L, "B", new ArrayList<>()));
         allTeams.add(new Team2(1L, "C", new ArrayList<>()));
 
