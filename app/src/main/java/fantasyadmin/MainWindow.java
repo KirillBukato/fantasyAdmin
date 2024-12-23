@@ -15,7 +15,7 @@ public class MainWindow extends JFrame {
     private final JComboBox<String> typeComboBox;
     private final JTextField fileTextField;
 
-    
+
     private final RequestSender requestSender;
 
     private ChGKPreprocessData data;
@@ -157,7 +157,7 @@ public class MainWindow extends JFrame {
         saveButton.setFont(new Font("Arial", Font.PLAIN, 12));
         saveButton.addActionListener(e -> {
             ArrayList<TeamIncomeDTO> incomes = data.getIncomes();
-            //send on server
+            RequestSender.sendIncomes(incomes);
         });
         saveButton.setFocusPainted(false);
 
