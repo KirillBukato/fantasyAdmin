@@ -120,7 +120,7 @@ public class ChGKPreprocessData {
                     teamIncomeDTO.setAmount(10 * entry.getValue());
                     teamIncomeDTO.setTeam_id(teamIdMap.get(nameMap.get(entry.getKey())));
                     teamIncomeDTO.setType(IncomeType.ChGK_Sum);
-                    teamIncomeDTO.setDescription("Sum on the tournament is " + entry.getValue());
+                    teamIncomeDTO.setDescription("Sum_on_the_tournament_is" + entry.getValue());
                     result.add(teamIncomeDTO);
                     System.out.println(teamIncomeDTO);
                 });
@@ -133,7 +133,7 @@ public class ChGKPreprocessData {
                                 teamIncomeDTO.setAmount(5);
                                 teamIncomeDTO.setTeam_id(teamIdMap.get(nameMap.get(value)));
                                 teamIncomeDTO.setType(IncomeType.ChGK_BestInTour);
-                                teamIncomeDTO.setDescription("Was best on " + entry.getKey() + " tour");
+                                teamIncomeDTO.setDescription("Was_best_on_" + entry.getKey() + "_tour");
                                 result.add(teamIncomeDTO);
                                 System.out.println(teamIncomeDTO);
                             }
@@ -146,7 +146,7 @@ public class ChGKPreprocessData {
                     teamIncomeDTO.setAmount(10);
                     teamIncomeDTO.setTeam_id(teamIdMap.get(nameMap.get(entry.getValue())));
                     teamIncomeDTO.setType(IncomeType.ChGK_CoffinSave);
-                    teamIncomeDTO.setDescription("Saved " + entry.getKey() + " question");
+                    teamIncomeDTO.setDescription("Saved_" + entry.getKey() + "_question");
                     result.add(teamIncomeDTO);
                     System.out.println(teamIncomeDTO);
                 });
