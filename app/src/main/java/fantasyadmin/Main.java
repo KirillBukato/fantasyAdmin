@@ -6,7 +6,5 @@ public class Main {
     public static void main(String[] args) {
         @SuppressWarnings("unused")
         MainWindow window = new MainWindow();
-        ChGKProcessor processor = new ChGKProcessor();
-        processor.preprocess("example.xlsx", ChGKTableType.BASIC);
     }
 }
