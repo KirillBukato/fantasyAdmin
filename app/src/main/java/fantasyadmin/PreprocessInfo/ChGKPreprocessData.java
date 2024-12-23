@@ -1,6 +1,7 @@
 package fantasyadmin.PreprocessInfo;
 
 import fantasyadmin.dto.IncomeType;
+import fantasyadmin.dto.TeamDTO;
 import fantasyadmin.dto.TeamIncomeDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -38,12 +39,9 @@ public class ChGKPreprocessData {
                 .toArray(new String[0]);
 
         // from api
-        ArrayList<Team2> allTeams = new ArrayList<>();
-        RequestSender.getPlayers();
-        allTeams.add(new Team2(1L, "B", new ArrayList<>()));
-        allTeams.add(new Team2(1L, "C", new ArrayList<>()));
+        ArrayList<TeamDTO> allTeams = RequestSender.getTeams();
 
-        for (Team2 team : allTeams) {
+        for (TeamDTO team : allTeams) {
             teamIdMap.put(team.getName(), team.getId());
         }
 
@@ -85,7 +83,7 @@ public class ChGKPreprocessData {
             JComboBox<String> comboBox = new JComboBox<>(
                     allTeams
                             .stream()
-                            .map(Team2::getName)
+                            .map(TeamDTO::getName)
                             .toArray(String[]::new));
             comboBox.setFont(new Font("Arial", Font.PLAIN, 12));
 
