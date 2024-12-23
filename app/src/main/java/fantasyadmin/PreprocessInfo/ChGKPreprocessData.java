@@ -1,13 +1,14 @@
-package PreprocessInfo;
+package fantasyadmin.PreprocessInfo;
 
-import dto.Team2;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.swing.*;
+
+import fantasyadmin.dto.Team2;
+
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 

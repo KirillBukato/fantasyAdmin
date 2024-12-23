@@ -1,4 +1,4 @@
-package dto;
+package fantasyadmin.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,14 +9,15 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PickDTO {
+public class PlayerDTO {
     private Long id;
-    private Double balance;
+    private String name;
+    private Double price;
     private Integer points;
 
-    private List<PlayerDTO> players;
+    private Long team_id;
 
-    private List<TeamDTO> teams;
+    private List<Long> pick_ids;
 
-    private Long user_id;
+    private List<PlayerIncomeDTO> incomes;
 }

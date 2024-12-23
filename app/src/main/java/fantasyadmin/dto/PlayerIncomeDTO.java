@@ -1,4 +1,4 @@
-package dto;
+package fantasyadmin.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TeamIncomeDTO {
+public class PlayerIncomeDTO {
     private Long id;
     private IncomeType type;
     private String description;
     private Integer amount;
 
-    private Long team_id;
+    private Long player_id;
 }

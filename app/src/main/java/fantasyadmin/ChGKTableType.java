@@ -1,3 +1,5 @@
+package fantasyadmin;
+
 import lombok.Getter;
 
 @Getter

@@ -1,4 +1,4 @@
-package dto;
+package fantasyadmin.dto;
 
 public enum IncomeType {
     ChGK_Sum,

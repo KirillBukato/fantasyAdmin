@@ -1,13 +1,8 @@
-import PreprocessInfo.ChGKPreprocessData;
-import dto.Team2;
-import org.apache.commons.lang3.tuple.Pair;
+package fantasyadmin;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 
 public class MainWindow extends JFrame {
 

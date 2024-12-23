@@ -1,4 +1,4 @@
-package dto;
+package fantasyadmin.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,18 +6,16 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+// TODO: проверка на нулы во всех конверторах
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TeamDTO {
+public class UserDTO {
     private Long id;
-    private String name;
-    private Double price;
-    private Integer points;
 
-    private List<PlayerDTO> players;
+    private String username;
+    private String name;
+    private String role;
 
     private List<Long> pick_ids;
-
-    private List<TeamIncomeDTO> incomes;
 }

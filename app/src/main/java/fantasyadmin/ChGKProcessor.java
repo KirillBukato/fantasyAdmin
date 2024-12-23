@@ -1,10 +1,11 @@
-import PreprocessInfo.ChGKPreprocessData;
-import dto.TeamIncomeDTO;
+package fantasyadmin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import fantasyadmin.PreprocessInfo.ChGKPreprocessData;
 
 public class ChGKProcessor {
 
