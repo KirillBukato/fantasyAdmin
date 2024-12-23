@@ -17,6 +17,8 @@ public class MainWindow extends JFrame {
 
     private final RequestSender requestSender;
 
+    private ChGKPreprocessData data;
+
     public MainWindow() {
         super("ЧГК Фентези. Клиент администратора");
         requestSender = new RequestSender();
