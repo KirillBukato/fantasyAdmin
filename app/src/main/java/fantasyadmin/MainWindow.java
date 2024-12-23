@@ -5,7 +5,6 @@ import java.awt.*;
 import java.util.Arrays;
 
 public class MainWindow extends JFrame {
-
     private final JComboBox<String> typeComboBox;
     private final JTextField fileTextField;
 
@@ -13,47 +12,97 @@ public class MainWindow extends JFrame {
         super("ЧГК Фентези. Клиент администратора");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
+        setMinimumSize(new Dimension(600, 400));
 
-        JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.setSize(600, 200);
-        {
-            JPanel filePanel = new JPanel(new BorderLayout());
+        // Create main container with padding
+        JPanel mainContainer = new JPanel(new BorderLayout(10, 10));
+        mainContainer.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-            JLabel fileLabel = new JLabel("Choose excel file");
-            filePanel.add(fileLabel, BorderLayout.NORTH);
+        // Create top panel with grid layout for even spacing
+        JPanel topPanel = new JPanel(new GridLayout(1, 3, 15, 0));
+        topPanel.setPreferredSize(new Dimension(800, 80));
 
-            fileTextField = new JTextField();
-            filePanel.add(fileTextField, BorderLayout.SOUTH);
+        // File selection panel
+        JPanel filePanel = new JPanel(new BorderLayout(5, 5));
+        filePanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createTitledBorder(
+                        BorderFactory.createEtchedBorder(),
+                        "Excel File Selection"
+                ),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)
+        ));
 
-            JButton fileButton = new JButton("Choose");
-            fileButton.addActionListener(e -> {
-                JFileChooser fileChooser = new JFileChooser();
-                fileChooser.showOpenDialog(null);
-                fileChooser.getSelectedFile();
+        JLabel fileLabel = new JLabel("File Path:");
+        fileLabel.setFont(new Font("Arial", Font.BOLD, 12));
+
+        fileTextField = new JTextField();
+        fileTextField.setFont(new Font("Arial", Font.PLAIN, 12));
+
+        JButton fileButton = new JButton("Browse...");
+        fileButton.setFont(new Font("Arial", Font.PLAIN, 12));
+        fileButton.setFocusPainted(false);
+
+        JPanel fileInputPanel = new JPanel(new BorderLayout(5, 0));
+        fileInputPanel.add(fileTextField, BorderLayout.CENTER);
+        fileInputPanel.add(fileButton, BorderLayout.EAST);
+
+        filePanel.add(fileLabel, BorderLayout.NORTH);
+        filePanel.add(fileInputPanel, BorderLayout.CENTER);
+
+        fileButton.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
                 fileTextField.setText(fileChooser.getSelectedFile().getAbsolutePath());
-            });
-            filePanel.add(fileButton, BorderLayout.CENTER);
+            }
+        });
 
-            topPanel.add(filePanel, BorderLayout.WEST);
-        }
+        // Type selection panel
+        JPanel typePanel = new JPanel(new BorderLayout(5, 5));
+        typePanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createTitledBorder(
+                        BorderFactory.createEtchedBorder(),
+                        "Type Selection"
+                ),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)
+        ));
 
-        {
-            JPanel typePanel = new JPanel(new BorderLayout());
+        JLabel typeLabel = new JLabel("Select Type:");
+        typeLabel.setFont(new Font("Arial", Font.BOLD, 12));
 
-            JLabel typeLabel = new JLabel("Choose type");
-            typePanel.add(typeLabel, BorderLayout.NORTH);
+        typeComboBox = new JComboBox<>(
+                Arrays.stream(ChGKTableType.values())
+                        .map(ChGKTableType::getName)
+                        .toArray(String[]::new)
+        );
+        typeComboBox.setFont(new Font("Arial", Font.PLAIN, 12));
 
-            typeComboBox = new JComboBox<>(
-                    Arrays.stream(ChGKTableType.values())
-                            .map(ChGKTableType::getName)
-                            .toArray(String[]::new)
-            );
-            typePanel.add(typeComboBox, BorderLayout.CENTER);
-            topPanel.add(typePanel, BorderLayout.CENTER);
-        }
+        typePanel.add(typeLabel, BorderLayout.NORTH);
+        typePanel.add(typeComboBox, BorderLayout.CENTER);
 
-        JButton preprocessButton = new JButton("Preprocess");
+        // Preprocess button panel
+        JPanel buttonPanel = new JPanel(new BorderLayout());
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+
+        JButton preprocessButton = new JButton("Preprocess Data");
+        preprocessButton.setFont(new Font("Arial", Font.BOLD, 12));
+        preprocessButton.setFocusPainted(false);
+        preprocessButton.setPreferredSize(new Dimension(150, 40));
+
+        // Create a wrapper panel to center the button vertically
+        JPanel buttonWrapper = new JPanel(new GridBagLayout());
+        buttonWrapper.add(preprocessButton);
+
+        buttonPanel.add(buttonWrapper, BorderLayout.CENTER);
+
         preprocessButton.addActionListener(e -> {
+            if (fileTextField.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "Please select an Excel file first.",
+                        "Input Required",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
             ChGKTableType type = ChGKTableType.getByName(
                     (String) typeComboBox.getSelectedItem()
             );
@@ -61,14 +110,33 @@ public class MainWindow extends JFrame {
 
             String path = fileTextField.getText();
 
-            getContentPane().add(processor.preprocess(path, type).createEditingPanel(), BorderLayout.CENTER);
+            // Remove existing center component if it exists
+            Component[] components = getContentPane().getComponents();
+            for (Component component : components) {
+                if (getContentPane().getLayout() instanceof BorderLayout &&
+                        ((BorderLayout) getContentPane().getLayout()).getConstraints(component) == BorderLayout.CENTER) {
+                    getContentPane().remove(component);
+                    break;
+                }
+            }
 
+            // Add new panel
+            getContentPane().add(processor.preprocess(path, type).createEditingPanel(), BorderLayout.CENTER);
+            revalidate();
+            repaint();
         });
 
-        topPanel.add(preprocessButton, BorderLayout.EAST);
-        getContentPane().add(topPanel, BorderLayout.NORTH);
+        // Add all panels to top panel
+        topPanel.add(filePanel);
+        topPanel.add(typePanel);
+        topPanel.add(buttonPanel);
+
+        // Add top panel to main container
+        mainContainer.add(topPanel, BorderLayout.NORTH);
+
+        // Set content pane
+        setContentPane(mainContainer);
+        setLocationRelativeTo(null);  // Center on screen
         setVisible(true);
     }
-
-
 }
