@@ -1,5 +1,7 @@
 package fantasyadmin.PreprocessInfo;
 
+import fantasyadmin.dto.IncomeType;
+import fantasyadmin.dto.TeamIncomeDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -10,15 +12,25 @@ import fantasyadmin.dto.Team2;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Data
-@AllArgsConstructor
 public class ChGKPreprocessData {
     private Map<String, Integer> sum;
     private Map<Integer, List<String>> tour_win;
     private Map<Integer, String> coffin_save;
+
+    private ArrayList<JTextField> tournamentNames = new ArrayList<>();
+    private ArrayList<JComboBox<String>> basicNames = new ArrayList<>();
+    private HashMap<String, Long> teamIdMap = new HashMap<>();
+
+    public ChGKPreprocessData(Map<String, Integer> sum, Map<Integer, List<String>> tour_win, Map<Integer, String> coffin_save) {
+        this.sum = sum;
+        this.tour_win = tour_win;
+        this.coffin_save = coffin_save;
+    }
 
     public JPanel createEditingPanel() {
         String[] teams = sum
@@ -30,6 +42,10 @@ public class ChGKPreprocessData {
         RequestSender.getTeams();
         allTeams.add(new Team2(1L, "B", new ArrayList<>()));
         allTeams.add(new Team2(1L, "C", new ArrayList<>()));
+
+        for (Team2 team : allTeams) {
+            teamIdMap.put(team.getName(), team.getId());
+        }
 
         // Create main container panel
         JPanel mainPanel = new JPanel(new BorderLayout(0, 10));
@@ -74,7 +90,9 @@ public class ChGKPreprocessData {
             comboBox.setFont(new Font("Arial", Font.PLAIN, 12));
 
             row.add(name);
+            tournamentNames.add(name);
             row.add(comboBox);
+            basicNames.add(comboBox);
 
             contentPanel.add(row);
             contentPanel.add(Box.createVerticalStrut(5));
@@ -87,23 +105,54 @@ public class ChGKPreprocessData {
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
-        // Buttons panel at the bottom
-        JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        buttonsPanel.setMaximumSize(new Dimension(600, 40));
-
-        JButton saveButton = new JButton("Save Changes");
-        saveButton.setFont(new Font("Arial", Font.PLAIN, 12));
-        saveButton.setFocusPainted(false);
-
-        JButton cancelButton = new JButton("Cancel");
-        cancelButton.setFont(new Font("Arial", Font.PLAIN, 12));
-        cancelButton.setFocusPainted(false);
-
-        buttonsPanel.add(saveButton);
-        buttonsPanel.add(cancelButton);
-
-        mainPanel.add(buttonsPanel, BorderLayout.SOUTH);
-
         return mainPanel;
+    }
+
+    public ArrayList<TeamIncomeDTO> getIncomes() {
+        Map<String, String> nameMap = new HashMap<>();
+        for (int i = 0; i < basicNames.size(); i++) {
+            nameMap.put(tournamentNames.get(i).getText(), basicNames.get(i).getSelectedItem().toString());
+        }
+
+        ArrayList<TeamIncomeDTO> result = new ArrayList<>();
+
+        sum.entrySet()
+                .forEach(entry -> {
+                    TeamIncomeDTO teamIncomeDTO = new TeamIncomeDTO();
+                    teamIncomeDTO.setAmount(10 * entry.getValue());
+                    teamIncomeDTO.setTeam_id(teamIdMap.get(nameMap.get(entry.getKey())));
+                    teamIncomeDTO.setType(IncomeType.ChGK_Sum);
+                    teamIncomeDTO.setDescription("Sum on the tournament is " + entry.getValue());
+                    result.add(teamIncomeDTO);
+                    System.out.println(teamIncomeDTO);
+                });
+
+        tour_win.entrySet()
+                .forEach(entry -> {
+                    entry.getValue().forEach(
+                            value -> {
+                                TeamIncomeDTO teamIncomeDTO = new TeamIncomeDTO();
+                                teamIncomeDTO.setAmount(5);
+                                teamIncomeDTO.setTeam_id(teamIdMap.get(nameMap.get(value)));
+                                teamIncomeDTO.setType(IncomeType.ChGK_BestInTour);
+                                teamIncomeDTO.setDescription("Was best on " + entry.getKey() + " tour");
+                                result.add(teamIncomeDTO);
+                                System.out.println(teamIncomeDTO);
+                            }
+                    );
+                });
+
+        coffin_save.entrySet()
+                .forEach(entry -> {
+                    TeamIncomeDTO teamIncomeDTO = new TeamIncomeDTO();
+                    teamIncomeDTO.setAmount(10);
+                    teamIncomeDTO.setTeam_id(teamIdMap.get(nameMap.get(entry.getValue())));
+                    teamIncomeDTO.setType(IncomeType.ChGK_CoffinSave);
+                    teamIncomeDTO.setDescription("Saved " + entry.getKey() + " question");
+                    result.add(teamIncomeDTO);
+                    System.out.println(teamIncomeDTO);
+                });
+
+        return result;
     }
 }
