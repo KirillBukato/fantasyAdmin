@@ -15,6 +15,7 @@ public class MainWindow extends JFrame {
     private final JComboBox<String> typeComboBox;
     private final JTextField fileTextField;
 
+    
     private final RequestSender requestSender;
 
     private ChGKPreprocessData data;
