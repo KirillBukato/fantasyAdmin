@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.swing.*;
 
+import fantasyadmin.api.RequestSender;
 import fantasyadmin.dto.Team2;
 
 import java.awt.*;
@@ -26,6 +27,7 @@ public class ChGKPreprocessData {
 
         //from api
         ArrayList<Team2> allTeams = new ArrayList<>();
+        RequestSender.getPlayers();
         allTeams.add(new Team2(1L, "B", new ArrayList<>()));
 
         JPanel result = new JPanel(new GridLayout(teams.length, 1));
