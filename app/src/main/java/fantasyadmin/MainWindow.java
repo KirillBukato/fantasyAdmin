@@ -1,12 +1,18 @@
 package fantasyadmin;
 
+import fantasyadmin.PreprocessInfo.ChGKPreprocessData;
+import fantasyadmin.dto.TeamIncomeDTO;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MainWindow extends JFrame {
     private final JComboBox<String> typeComboBox;
     private final JTextField fileTextField;
+
+    private ChGKPreprocessData data = null;
 
     public MainWindow() {
         super("ЧГК Фентези. Клиент администратора");
@@ -120,8 +126,10 @@ public class MainWindow extends JFrame {
                 }
             }
 
+            data = processor.preprocess(path, type);
+
             // Add new panel
-            getContentPane().add(processor.preprocess(path, type).createEditingPanel(), BorderLayout.CENTER);
+            getContentPane().add(data.createEditingPanel(), BorderLayout.CENTER);
             revalidate();
             repaint();
         });
@@ -133,6 +141,22 @@ public class MainWindow extends JFrame {
 
         // Add top panel to main container
         mainContainer.add(topPanel, BorderLayout.NORTH);
+
+        // Buttons panel at the bottom
+        JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonsPanel.setMaximumSize(new Dimension(600, 40));
+
+        JButton saveButton = new JButton("Apply");
+        saveButton.setFont(new Font("Arial", Font.PLAIN, 12));
+        saveButton.addActionListener(e -> {
+            ArrayList<TeamIncomeDTO> incomes = data.getIncomes();
+            //send on server
+        });
+        saveButton.setFocusPainted(false);
+
+        buttonsPanel.add(saveButton);
+
+        mainContainer.add(buttonsPanel, BorderLayout.SOUTH);
 
         // Set content pane
         setContentPane(mainContainer);
