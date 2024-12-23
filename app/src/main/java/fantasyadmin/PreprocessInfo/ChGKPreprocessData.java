@@ -39,7 +39,7 @@ public class ChGKPreprocessData {
                 .toArray(new String[0]);
 
         // from api
-        ArrayList<TeamDTO> allTeams = RequestSender.getTeams();
+        List<TeamDTO> allTeams = RequestSender.getTeams();
 
         for (TeamDTO team : allTeams) {
             teamIdMap.put(team.getName(), team.getId());
