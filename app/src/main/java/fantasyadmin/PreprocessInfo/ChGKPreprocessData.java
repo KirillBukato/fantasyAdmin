@@ -8,7 +8,6 @@ import lombok.Data;
 import javax.swing.*;
 
 import fantasyadmin.api.RequestSender;
-import fantasyadmin.dto.Team2;
 
 import java.awt.*;
 import java.util.ArrayList;

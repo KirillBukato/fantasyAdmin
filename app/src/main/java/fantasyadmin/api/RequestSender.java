@@ -15,7 +15,6 @@ import org.apache.http.util.EntityUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import fantasyadmin.dto.IncomeType;
 import fantasyadmin.dto.TeamDTO;
 import fantasyadmin.dto.TeamIncomeDTO;
 import lombok.Data;
@@ -73,19 +72,11 @@ public class RequestSender {
                 
                 if (entity != null) {
                     String result = EntityUtils.toString(entity);
-                    System.out.println("Response: " + result);
                     ObjectMapper mapper = new ObjectMapper();
                     
                     List<TeamDTO> teams = mapper.readValue(result, new TypeReference<List<TeamDTO>>(){});
                     
                     teams.forEach(team -> System.out.println("Parsed team: " + team));
-                    
-                    for(TeamDTO team : teams) {
-                        System.out.println("Team ID: " + team.getId());
-                        System.out.println("Team Name: " + team.getName());
-                        System.out.println("Players count: " + team.getPlayers().size());
-                        System.out.println("---------------");
-                    }
                     return teams;
                 } else {
                     return null;
@@ -104,8 +95,7 @@ public class RequestSender {
         public static void sendIncomes(List<TeamIncomeDTO> data) {
         try {
             List<TeamIncome> teamIncomes = data.stream().map(dto -> new TeamIncome(
-                    dto.getId(),
-                    dto.getType(),
+                    // dto.getType(),
                     dto.getDescription(),
                     dto.getAmount(),
                     new Team(dto.getTeam_id())
@@ -162,8 +152,7 @@ class Team {
 @NoArgsConstructor
 @AllArgsConstructor
 class TeamIncome {
-    private Long id;
-    private IncomeType type;
+    // private IncomeType type;
     private String description;
     private Integer amount;
 
